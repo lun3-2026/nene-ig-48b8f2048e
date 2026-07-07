@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nene's Instagramギャラリー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --rose:#b33e5c; --rose-mid:#d4728a; --rose-soft:#e8a0b5;
+      --gold:#c79a5b; --ink:#3f343a; --muted:#a6939a;
+      --bg:#fdf2f4; --card:#ffffff; --line:#f1dee4;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:'Noto Sans JP',sans-serif; color:var(--ink);
+      background-color:var(--bg);
+      background-image:
+        radial-gradient(ellipse at 15% 25%, rgba(240,160,180,.30) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 30%, rgba(245,205,165,.22) 0%, transparent 50%),
+        radial-gradient(ellipse at 25% 80%, rgba(200,150,180,.26) 0%, transparent 55%),
+        radial-gradient(ellipse at 75% 85%, rgba(240,210,200,.20) 0%, transparent 50%);
+      background-attachment:fixed; min-height:100vh;
+    }
+    header{
+      background:linear-gradient(135deg,var(--rose) 0%,var(--rose-mid) 55%,var(--rose-soft) 100%);
+      color:#fff; padding:22px 20px 18px; text-align:center;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 6px 24px rgba(179,62,92,.28);
+      border-bottom:2px solid rgba(255,255,255,.35);
+    }
+    header h1{
+      font-family:'Shippori Mincho B1',serif; font-weight:800;
+      font-size:1.32rem; letter-spacing:.04em; margin-bottom:6px;
+      text-shadow:0 2px 10px rgba(120,30,55,.25);
+    }
+    header p{font-size:.82rem; opacity:.92; letter-spacing:.12em;}
+    header p::before,header p::after{content:"\2014"; color:rgba(255,255,255,.6); margin:0 .5em;}
+    .nav-home{
+      display:inline-block; margin-top:12px; background:#fff; color:var(--rose);
+      padding:6px 18px; border-radius:999px; text-decoration:none;
+      font-size:.78rem; font-weight:700; letter-spacing:.03em;
+      box-shadow:0 3px 10px rgba(179,62,92,.22); transition:.2s;
+    }
+    .nav-home:hover{transform:translateY(-1px); box-shadow:0 6px 16px rgba(179,62,92,.3);}
+    .filter-bar{
+      background:rgba(255,255,255,.85); backdrop-filter:blur(6px);
+      border-bottom:1px solid var(--line); padding:12px 16px 10px;
+      display:flex; flex-direction:column; gap:8px; align-items:center;
+      position:sticky; top:78px; z-index:90;
+    }
+    .tab-row,.sub-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; align-items:center;}
+    .filter-btn{
+      background:#fbeef2; color:var(--rose);
+      border:1.5px solid #f1d2dc; padding:8px 22px; border-radius:999px;
+      cursor:pointer; font-size:.85rem; font-family:'Noto Sans JP',sans-serif;
+      font-weight:700; letter-spacing:.02em; transition:.22s;
+    }
+    .filter-btn:hover{border-color:var(--rose-soft); transform:translateY(-1px);}
+    .filter-btn.active{
+      background:linear-gradient(135deg,var(--rose),var(--rose-mid));
+      color:#fff; border-color:transparent; box-shadow:0 4px 14px rgba(179,62,92,.32);
+    }
+    .sub-row{display:none;}
+    .sub-row.show{display:flex;}
+    .sub-btn{
+      background:#fff; color:#9a6b78; border:1.5px solid #eed7de;
+      padding:5px 14px; border-radius:999px; cursor:pointer;
+      font-size:.76rem; font-family:'Noto Sans JP',sans-serif; font-weight:700; transition:.2s;
+    }
+    .sub-btn:hover{border-color:var(--rose-soft);}
+    .sub-btn.active{background:var(--rose); color:#fff; border-color:transparent;}
+    .review-note{
+      display:none; background:#fff6e8; border-bottom:1px solid #eedcbf;
+      color:#8a6a3a; font-size:.78rem; padding:10px 16px; text-align:center; line-height:1.6;
+    }
+    .review-note.show{display:block;}
+    .count-bar{
+      text-align:center; padding:14px 10px 6px; font-size:.8rem; color:var(--muted);
+      letter-spacing:.05em;
+    }
+    .count-bar::before{content:"\25C8"; color:var(--gold); margin-right:.5em; font-size:.7rem;}
+    .gallery-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
+      padding:18px; max-width:1080px; margin:0 auto;
+    }
+    @media(min-width:600px){.gallery-grid{gap:14px;padding:24px;}}
+    @media(min-width:900px){.gallery-grid{grid-template-columns:repeat(4,1fr);gap:16px;}}
+    .gallery-item{
+      aspect-ratio:9/16; overflow:hidden; cursor:pointer; position:relative;
+      background:#f6e7ec; border-radius:12px;
+      box-shadow:0 2px 10px rgba(179,62,92,.10);
+      border:1px solid rgba(255,255,255,.6); transition:.25s;
+    }
+    .gallery-item:hover{transform:translateY(-2px); box-shadow:0 8px 22px rgba(179,62,92,.18);}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+    .gallery-item:hover img{transform:scale(1.03);}
+    .gallery-item .overlay{
+      position:absolute; inset:auto 0 0 0;
+      background:linear-gradient(transparent,rgba(120,30,55,.62));
+      padding:22px 8px 7px; opacity:0; transition:opacity .25s;
+    }
+    .gallery-item:hover .overlay{opacity:1;}
+    .gallery-item .overlay span{color:#fff;font-size:.62rem;word-break:break-all;}
+    /* Lightbox */
+    #lightbox{display:none;position:fixed;inset:0;background:rgba(40,18,28,.94);
+      z-index:1000;justify-content:center;align-items:center;flex-direction:column;}
+    #lightbox.open{display:flex;}
+    #lightbox img{max-width:92vw;max-height:84vh;object-fit:contain;border-radius:10px;
+      box-shadow:0 12px 50px rgba(0,0,0,.6);}
+    #lightbox-controls{display:flex;gap:14px;margin-top:18px;align-items:center;}
+    .lb-btn{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.24);padding:9px 20px;
+      border-radius:4px;cursor:pointer;font-size:.9rem;font-family:'Noto Sans JP',sans-serif;
+      font-weight:400;letter-spacing:.04em;transition:.2s;}
+    .lb-btn:hover{background:rgba(255,255,255,.22);}
+    .lb-btn.close-btn{background:rgba(179,62,92,.45);border-color:rgba(255,255,255,.2);}
+    .lb-btn.close-btn:hover{background:rgba(179,62,92,.75);}
+    #lb-counter{color:rgba(255,255,255,.8);font-size:.85rem;letter-spacing:.05em;}
+    #lb-filename{color:rgba(255,255,255,.5);font-size:.7rem;margin-top:8px;
+      word-break:break-all;max-width:80vw;text-align:center;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>nene's Instagramギャラリー</h1>
+    <p>アンケート / Q&amp;A</p>
+    <a href="index.html" class="nav-home">← トップへ戻る</a>
+  </header>
+
+  <div class="filter-bar">
+    <div class="tab-row" id="tab-row"></div>
+    <div class="sub-row" id="sub-row"></div>
+  </div>
+  <div class="review-note" id="review-note">
+    ここは「要確認」置き場です（質問だけ・回答だけ等の削除候補）。公開トップからはリンクされていません。
+  </div>
+
+  <div class="count-bar" id="count-bar"></div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <img id="lb-img" src="" alt="">
+    <div id="lb-counter"></div>
+    <div id="lb-filename"></div>
+    <div id="lightbox-controls">
+      <button class="lb-btn" onclick="lbPrev()">◀ 前へ</button>
+      <button class="lb-btn close-btn" onclick="closeLb()">✕ 閉じる</button>
+      <button class="lb-btn" onclick="lbNext()">次へ ▶</button>
+    </div>
+  </div>
+
+  <script>
+    const ALL_IMAGES = [
+__ALL_IMAGES__
+];
+
+    const CAT_BY_IDX = __CAT_BY_IDX__;
+    const COUNTS = __COUNTS__;
+    const QA_KEYS = ['juku','gakko','benkyo','kokoro','sonota'];
+    const SUB_LABELS = {juku:'塾のこと', gakko:'学校・受験情報', benkyo:'勉強法・家庭学習', kokoro:'声かけ・メンタル', sonota:'その他'};
+
+    // state: mainTab = 'poll' | 'qa' | 'incomplete', subCat = 'all' | one of QA_KEYS
+    let mainTab = 'qa';
+    let subCat = 'all';
+    let filteredImages = [];
+    let lbIndex = 0;
+
+    function getFiltered() {
+      if (mainTab === 'poll') return ALL_IMAGES.filter(i => CAT_BY_IDX[i.idx] === 'poll');
+      if (mainTab === 'incomplete') return ALL_IMAGES.filter(i => CAT_BY_IDX[i.idx] === 'incomplete');
+      if (subCat === 'all') return ALL_IMAGES.filter(i => QA_KEYS.includes(CAT_BY_IDX[i.idx]));
+      return ALL_IMAGES.filter(i => CAT_BY_IDX[i.idx] === subCat);
+    }
+
+    function renderBars() {
+      const tabRow = document.getElementById('tab-row');
+      tabRow.innerHTML = '';
+      const tabs = [['poll', 'アンケート (' + COUNTS.poll + ')'], ['qa', 'Q&A (' + COUNTS.qa + ')']];
+      if (mainTab === 'incomplete') tabs.push(['incomplete', '要確認 (' + COUNTS.incomplete + ')']);
+      tabs.forEach(([key, label]) => {
+        const b = document.createElement('button');
+        b.className = 'filter-btn' + (mainTab === key ? ' active' : '');
+        b.textContent = label;
+        b.onclick = () => { mainTab = key; if (key !== 'qa') subCat = 'all'; render(); };
+        tabRow.appendChild(b);
+      });
+      const subRow = document.getElementById('sub-row');
+      subRow.innerHTML = '';
+      subRow.classList.toggle('show', mainTab === 'qa');
+      if (mainTab === 'qa') {
+        const subs = [['all', 'すべて (' + COUNTS.qa + ')']].concat(
+          QA_KEYS.map(k => [k, SUB_LABELS[k] + ' (' + COUNTS[k] + ')']));
+        subs.forEach(([key, label]) => {
+          const b = document.createElement('button');
+          b.className = 'sub-btn' + (subCat === key ? ' active' : '');
+          b.textContent = label;
+          b.onclick = () => { subCat = key; render(); };
+          subRow.appendChild(b);
+        });
+      }
+      document.getElementById('review-note').classList.toggle('show', mainTab === 'incomplete');
+    }
+
+    function render() {
+      renderBars();
+      filteredImages = getFiltered();
+      document.getElementById('count-bar').textContent = filteredImages.length + ' 枚を表示中';
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = '';
+      filteredImages.forEach((img, i) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.onclick = () => openLb(i);
+        item.innerHTML = `
+          <img src="${img.src}" alt="${img.name}" loading="lazy">
+          <div class="overlay"><span>${img.name}</span></div>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
+    // Lightbox
+    function openLb(i) {
+      lbIndex = i;
+      updateLb();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLb() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function updateLb() {
+      const img = filteredImages[lbIndex];
+      document.getElementById('lb-img').src = img.src;
+      document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${filteredImages.length}`;
+      document.getElementById('lb-filename').textContent = img.name;
+    }
+
+    function lbPrev() {
+      lbIndex = (lbIndex - 1 + filteredImages.length) % filteredImages.length;
+      updateLb();
+    }
+
+    function lbNext() {
+      lbIndex = (lbIndex + 1) % filteredImages.length;
+      updateLb();
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') lbPrev();
+      if (e.key === 'ArrowRight') lbNext();
+      if (e.key === 'Escape') closeLb();
+    });
+
+    // Close lightbox on background click
+    document.getElementById('lightbox').addEventListener('click', e => {
+      if (e.target === document.getElementById('lightbox')) closeLb();
+    });
+
+    // Initial state from URL: ?cat=poll|qa|juku|gakko|benkyo|kokoro|sonota|incomplete
+    (function initFilter(){
+      const p = new URLSearchParams(location.search);
+      let f = p.get('cat') || p.get('filter') || 'qa';
+      if (f === 'アンケート') f = 'poll';
+      if (f === 'その他' || f === 'それ以外' || f === 'other') f = 'qa';
+      if (f === 'poll' || f === 'incomplete') { mainTab = f; }
+      else if (QA_KEYS.includes(f)) { mainTab = 'qa'; subCat = f; }
+      else { mainTab = 'qa'; subCat = 'all'; }
+      render();
+    })();
+  </script>
+</body>
+</html>
