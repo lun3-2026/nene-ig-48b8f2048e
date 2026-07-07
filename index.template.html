@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>nene's Instagramギャラリー</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,6 +69,11 @@
     .card-title{font-family:'Shippori Mincho B1',serif;font-size:1.42rem;font-weight:700;margin-bottom:8px;color:var(--ink);letter-spacing:.02em;}
     .card-desc{font-size:.82rem;color:var(--muted);line-height:1.6;}
     .card-arrow{color:var(--rose);font-size:1.3rem;flex-shrink:0;}
+    .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+    .tag{
+      background:#fbeef2;color:var(--rose);border:1px solid #f1d2dc;
+      font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;
+    }
     .info-box{
       background:rgba(255,255,255,.7);border:1px solid #f3d4de;border-radius:16px;
       padding:20px 22px;margin-top:26px;font-size:.82rem;color:#a3727f;line-height:1.85;
@@ -84,8 +90,8 @@
   <div class="hero">
     <h1>nene's<br>Instagramギャラリー</h1>
     <div class="rule"></div>
-    <p>中学受験ママのための<br>Q&Aコーナー アーカイブ</p>
-    <span class="hero-badge">中学受験パートナー</span>
+    <p>中学受験ママのための<br>Q&amp;Aコーナー アーカイブ</p>
+    <span class="hero-badge">中学受験のねね</span>
   </div>
 
   <div class="stats-bar">
@@ -94,17 +100,17 @@
       <span class="stat-label">総画像数</span>
     </div>
     <div class="stat">
-      <span class="stat-num">2</span>
-      <span class="stat-label">コンテンツ種別</span>
+      <span class="stat-num">__POLL__</span>
+      <span class="stat-label">アンケート</span>
     </div>
     <div class="stat">
-      <span class="stat-num">Q&A</span>
-      <span class="stat-label">コーナー</span>
+      <span class="stat-num">__QA__</span>
+      <span class="stat-label">Q&amp;A</span>
     </div>
   </div>
 
   <main>
-    <p class="section-title">コンテンツ種別</p>
+    <p class="section-title">コンテンツ</p>
 
     <div class="cards">
       <a class="card" href="gallery.html?cat=poll">
@@ -115,10 +121,17 @@
         <span class="card-arrow">→</span>
       </a>
 
-      <a class="card" href="gallery.html?cat=other">
+      <a class="card" href="gallery.html?cat=qa">
         <div class="card-body">
-          <div class="card-title">それ以外</div>
-          <div class="card-desc">質問箱・Q&A・お役立ち投稿など。受験の悩みや疑問への回答</div>
+          <div class="card-title">Q&amp;A</div>
+          <div class="card-desc">質問箱に寄せられたお悩みへの回答アーカイブ。テーマで絞り込めます</div>
+          <div class="tag-row">
+            <span class="tag">塾のこと</span>
+            <span class="tag">学校・受験情報</span>
+            <span class="tag">勉強法・家庭学習</span>
+            <span class="tag">声かけ・メンタル</span>
+            <span class="tag">その他</span>
+          </div>
         </div>
         <span class="card-arrow">→</span>
       </a>
@@ -126,14 +139,15 @@
 
     <div class="info-box">
       <strong>使い方のヒント</strong><br>
-      上の2種類から選ぶと、該当する画像だけを表示できます。画像を<strong>クリックすると拡大表示</strong>できます。
-      キーボードの <strong>← →</strong> キーで前後の画像に移動、<strong>Esc</strong> で閉じられます。
-      画像が多いため、スクロールに合わせて自動的に読み込まれます（Lazy Loading）。
+      上の2種類から選ぶと、該当する画像だけを表示できます。Q&amp;Aの中では、テーマのボタンでさらに絞り込めます。
+      画像を<strong>タップ（クリック）すると拡大表示</strong>できます。
+      画像が多いため、スクロールに合わせて自動的に読み込まれます。
     </div>
   </main>
 
   <footer>
-    nene's Instagramギャラリー — Q&Aコーナーアーカイブ
+    nene's Instagramギャラリー — Q&amp;Aコーナーアーカイブ<br>
+    © 中学受験のねね（@nene_juken_）当サイト内の画像・文章の無断転載・複製・商用利用を禁じます
   </footer>
 
 </body>
